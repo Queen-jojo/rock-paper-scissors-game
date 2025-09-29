@@ -7,6 +7,8 @@ const Game = () => {
   const [computerVal, setComputerVal] = useState(null);
   const [playerScore, setPlayerScore] = useState(0);
   const [compScore, setCompScore] = useState(0);
+  const [resetMessage, setResetMessage] = useState("");
+  const [resultMsg, setResultMsg] = useState("");
 
   const logic = (player, computer) => {
     if (player === computer) return 0;
@@ -28,8 +30,30 @@ const Game = () => {
     setPlayerVal(playerChoice);
     setComputerVal(compChoice);
 
-    if (result === 1) setPlayerScore(playerScore + 1);
-    else if (result === -1) setCompScore(compScore + 1);
+    if (result === 1) {
+      setPlayerScore(playerScore + 1);
+      setResultMsg("Congratzz! You win this round!🎉");
+    } else if (result === -1) {
+      setCompScore(compScore + 1);
+      setResultMsg("Shame! You lost against a computer 😔🤖🤦🏾‍♀️");
+    } else {
+      setResultMsg("It's a tie!👏🏾🤷🏾‍♀️");
+    }
+
+    setResetMessage("");
+  };
+
+  const resetGame = () => {
+    setPlayerVal(null);
+    setComputerVal(null);
+    setPlayerScore(0);
+    setCompScore(0);
+    setResultMsg("");
+    setResetMessage("New Game started!🎉");
+
+    setTimeout(() => {
+      setResetMessage("");
+    }, 2500);
   };
 
   return (
@@ -51,6 +75,13 @@ const Game = () => {
         <p>Computer's choice: {computerVal}</p>
         <h2>Your Score: {playerScore}</h2>
         <h2>Computer Score: {compScore}</h2>
+        <p className="result-msg">{resultMsg}</p>
+        {(playerScore > 0 || compScore > 0) && (
+          <button className="reset-btn" onClick={resetGame}>
+            Reset Game 🔄
+          </button>
+        )}
+        {resetMessage && <p>{resetMessage}</p>}
       </div>
     </div>
   );
